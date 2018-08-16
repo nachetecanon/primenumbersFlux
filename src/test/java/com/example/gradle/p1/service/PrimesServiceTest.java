@@ -7,28 +7,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.gradle.p1.service.Service.WELL_KNOWN_FIRST_PRIMES;
+import static com.example.gradle.p1.service.PrimesService.WELL_KNOWN_FIRST_PRIMES;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ServiceTest {
+public class PrimesServiceTest {
 
-    private Service service = new Service();
+    private PrimesService primesService = new PrimesService();
 
     @Test
     public void assert_that_is_prime_works() {
-        assertThat(WELL_KNOWN_FIRST_PRIMES.stream().allMatch(service::isPrime))
+        assertThat(WELL_KNOWN_FIRST_PRIMES.stream().allMatch(primesService::isPrime))
                 .isTrue();
     }
 
     @Test
     public void assert_that_0_not_prime_works() {
-        assertThat(service.isPrime(0L))
+        assertThat(primesService.isPrime(0L))
                 .isFalse();
     }
 
     @Test
     public void assert_that_1_is_not_prime() {
-        assertThat(service.isPrime(1L))
+        assertThat(primesService.isPrime(1L))
                 .isFalse();
     }
 
@@ -38,7 +38,7 @@ public class ServiceTest {
                 .filter(p -> p > 2L)
                 .collect(Collectors.toList());
         for (int i = reverseList.size() - 1, j = reverseList.size() - 2; j >= 0; i--, j--) {
-            final @Valid Optional<Long> primefound = service.closestPrimeUnder(reverseList.get(i));
+            final @Valid Optional<Long> primefound = primesService.closestPrimeUnder(reverseList.get(i));
             assertThat(primefound.isPresent())
                     .isTrue();
             assertThat(primefound.get()).isEqualTo(reverseList.get(j));
