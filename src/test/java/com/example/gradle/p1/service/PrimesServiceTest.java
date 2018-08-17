@@ -46,4 +46,20 @@ public class PrimesServiceTest {
         }
     }
 
+    @Test
+    public void assert_no_prime_under_param_returns_empty() {
+        assertThat(primesService.closestPrimeUnder(2L))
+                .isEmpty();
+    }
+
+    @Test
+    public void assert_working_after_big_number_provided() {
+        final Optional<Long> result = primesService.closestPrimeUnder(7703L);
+        assertThat(result)
+                .isNotEmpty();
+        assertThat(result.get())
+                /* https://www.di-mgt.com.au/primes1000.html */
+                .isEqualTo(7699L);
+    }
+
 }

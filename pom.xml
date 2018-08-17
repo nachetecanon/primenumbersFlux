@@ -15,11 +15,12 @@
     <name>Prime numbers demo</name>
     <description>Prime numbers Demo project for Spring Boot</description>
     <properties>
+        <cobertura.skip>false</cobertura.skip>
+        <cobertura-branch.rate>70%</cobertura-branch.rate>
+        <cobertura-line.rate>90%</cobertura-line.rate>
         <jacoco.version>0.8.1</jacoco.version>
         <java.version>1.10</java.version>
-        <cobertura.skip>false</cobertura.skip>
-        <cobertura-branch.rate>95%</cobertura-branch.rate>
-        <cobertura-line.rate>95%</cobertura-line.rate>
+        <junit.version>4.12</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring.cloud.version>Finchley.SR1</spring.cloud.version>
@@ -54,25 +55,24 @@
             <artifactId>spring-cloud-config-client</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-webtestclient</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>central-maven</id>
-            <name>central</name>
-            <url>http://central.maven.org/maven2</url>
-        </repository>
-    </repositories>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
     <build>
         <plugins>
             <plugin>
@@ -242,8 +242,21 @@
                 </executions>
             </plugin>
         </plugins>
-
     </build>
+    <repositories>
+        <repository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/libs-release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>central-maven</id>
+            <name>central</name>
+            <url>http://central.maven.org/maven2</url>
+        </repository>
+    </repositories>
 
 
 </project>

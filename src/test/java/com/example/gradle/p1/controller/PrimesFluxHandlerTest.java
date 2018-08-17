@@ -1,6 +1,7 @@
 package com.example.gradle.p1.controller;
 
 
+import com.example.gradle.p1.exceptions.PrimeNotFoundException;
 import com.example.gradle.p1.service.PrimesService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +37,16 @@ public class PrimesFluxHandlerTest {
         });
     }
 
+    @Test
+    public void assert_that_when_closest_prime_number_not_found() {
+        when(primesService.closestPrimeUnder(anyLong()))
+                .thenReturn(Optional.empty());
+        primesFluxHandler.getClosestPrimeUnder(2L)
+                .doOnError(throwable -> {
+                    assertThat(throwable)
+                            .isInstanceOf(PrimeNotFoundException.class);
+                });
+    }
 
     @Test
     public void assert_that_is_prime_is_correctly_called_for_true() {
