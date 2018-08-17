@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+
 @RequestMapping(path = "/api/${api.version:-v0}")
 @RestController
 public class PrimesController {
