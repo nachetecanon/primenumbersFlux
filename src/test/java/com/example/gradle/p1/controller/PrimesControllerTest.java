@@ -45,4 +45,28 @@ public class PrimesControllerTest {
                 .expectBody(String.class);
 
     }
+
+    @Test
+    public void testIsPrimeOk() {
+        when(primesFluxHandler.isPrime(anyLong()))
+                .thenReturn(Mono.just(true));
+        webClient.get().uri("/isprime/{number}", 1L)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Boolean.class)
+                .isEqualTo(Boolean.TRUE);
+
+    }
+
+    @Test
+    public void testIsPrimeBad() {
+        when(primesFluxHandler.isPrime(anyLong()))
+                .thenReturn(Mono.just(false));
+        webClient.get().uri("/isprime/{number}", 1L)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Boolean.class)
+                .isEqualTo(Boolean.FALSE);
+
+    }
 }
