@@ -1,0 +1,7 @@
+---
+spring:
+  application:
+    name: primenumbers
+
+api:
+  version: 1.0
