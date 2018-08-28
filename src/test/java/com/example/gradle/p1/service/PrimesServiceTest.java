@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.gradle.p1.service.PrimesService.WELL_KNOWN_FIRST_PRIMES;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class PrimesServiceTest {
@@ -16,7 +15,7 @@ public class PrimesServiceTest {
 
     @Test
     public void assert_that_is_prime_works() {
-        assertThat(WELL_KNOWN_FIRST_PRIMES.stream().allMatch(primesService::isPrime))
+        assertThat(PrimesService.WELL_KNOWN_FIRST_PRIMES.stream().allMatch(primesService::isPrime))
                 .isTrue();
     }
 
@@ -34,8 +33,8 @@ public class PrimesServiceTest {
 
     @Test
     public void find_prime_under_some_number() {
-        final List<Integer> reverseList = WELL_KNOWN_FIRST_PRIMES.stream()
-                .filter(p -> p > 2)
+        final List<Long> reverseList = PrimesService.WELL_KNOWN_FIRST_PRIMES.stream()
+                .filter(p -> p > 2L)
                 .collect(Collectors.toList());
         for (int i = reverseList.size() - 1, j = reverseList.size() - 2; j >= 0; i--, j--) {
             final @Valid Optional<Integer> primefound = primesService.closestPrimeUnder(reverseList.get(i));
