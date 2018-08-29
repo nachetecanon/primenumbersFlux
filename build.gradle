@@ -1,79 +1,63 @@
-buildscript {
-    repositories {
-        maven {
-            url "https://repo.spring.io/libs-release"
-        }
-        mavenCentral ()
-    }
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.0.4.RELEASE"
-        classpath "io.spring.gradle:dependency-management-plugin:0.5.2.RELEASE"
-    }
-}
-project.version = '0.0.0-SNAPSHOT'
-project.description = 'P1 project'
-project.group = 'com.icanon.valverde'
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'groovy'
+    apply plugin: 'checkstyle'
+    apply plugin: 'pmd'
+    apply plugin: 'jacoco'
 
-apply plugin: 'checkstyle'
-apply plugin: 'pmd'
-apply plugin: 'jacoco'
-apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
+    group 'com.valverde.nacho'
 
-
-jacoco {
-    toolVersion = "0.8.1"
-}
-jacocoTestReport {
-    reports {
-        xml.enabled false
-        csv.enabled false
-        html.destination file("${buildDir}/reports/jacoco/html")
-    }
-    executionData = files("${buildDir}/jacoco/test.exec")
-}
-
-jacocoTestCoverageVerification {
-    violationRules {
-        rule {
-            enabled = true
-            element = 'CLASS'
-            excludes = ['**/generated/**/*', '**/model/**/*', '**/dto/**/*', '*Configuration.*', '*Exception.*', '*Application', '*DTO.*']
-
-            limit {
-                counter = 'LINE'
-                value = 'COVEREDRATIO'
-                minimum = 0.95
-            }
-            limit {
-                counter = 'BRANCH'
-                value = 'COVEREDRATIO'
-                minimum = 0.70
-            }
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.SR1'
         }
     }
-}
 
-check.dependsOn(jacocoTestCoverageVerification)
-
-
-
-dependencyManagement {
-    imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.SR1'
+    buildscript {
+        repositories {
+            mavenCentral ()
+            maven { url "https://repo.spring.io/libs-release" }
+            maven { url "https://repo.spring.io/libs-snapshot" }
+        }
+        dependencies {
+            compile 'org.codehaus.groovy:groovy-all:2.5.2'
+            testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+        }
     }
-}
-dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
-    compile group: 'org.springframework.boot', name: 'spring-boot-actuator'
-    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    testCompile group: 'io.projectreactor', name: 'reactor-test'
-}
-repositories {
-    maven { url "https://repo.spring.io/libs-release" }
-    maven { url "https://repo.spring.io/libs-snapshot" }
-    maven { url "http://central.maven.org/maven2" }
-    maven { url "http://repo.maven.apache.org/maven2" }
+
+    jacoco {
+        toolVersion = "0.8.1"
+    }
+    jacocoTestReport {
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.destination file("${buildDir}/reports/jacoco/html")
+        }
+        executionData = files("${buildDir}/jacoco/test.exec")
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                enabled = true
+                element = 'CLASS'
+                excludes = ['**/generated/**/*', '**/model/**/*', '**/dto/**/*', '*Configuration.*', '*Exception.*', '*Application', '*DTO.*']
+
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.95
+                }
+                limit {
+                    counter = 'BRANCH'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.70
+                }
+            }
+        }
+    }
+
+    check.dependsOn(jacocoTestCoverageVerification)
+
 }

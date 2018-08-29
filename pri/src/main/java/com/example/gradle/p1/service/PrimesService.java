@@ -45,4 +45,28 @@ public class PrimesService {
 
         return true;
     }
+
+    public Set<Long> generatePrimesTo(final Long end) {
+        final Long omega = Optional.ofNullable(end).orElse(2L);
+        Set<Long> result = Set.of(omega);
+        if (Optional.ofNullable(end).isPresent()) {
+            result = /*sieveOfEratosthenes(end)*/null;
+        }
+        return result;
+    }
+
+
+    /**
+     * based in {@link "https://www.baeldung.com/java-generate-prime-numbers"}
+     *
+     * @param end final number to generate the list
+     * @return private Set<Long> sieveOfEratosthenes(final Long end) {
+    List<Boolean> primes = new boolean[end + 1];
+    LongStream.iterate(2L, operand -> operand * operand <= end, op -> op++)
+    .map(l -> String.format("%ld-%c", l, 'F'))
+    .
+    return WELL_KNOWN_FIRST_PRIMES;
+    }
+     */
+
 }
