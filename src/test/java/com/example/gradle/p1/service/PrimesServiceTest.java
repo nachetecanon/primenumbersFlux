@@ -22,23 +22,23 @@ public class PrimesServiceTest {
 
     @Test
     public void assert_that_0_not_prime_works() {
-        assertThat(primesService.isPrime(0L))
+        assertThat(primesService.isPrime(0))
                 .isFalse();
     }
 
     @Test
     public void assert_that_1_is_not_prime() {
-        assertThat(primesService.isPrime(1L))
+        assertThat(primesService.isPrime(1))
                 .isFalse();
     }
 
     @Test
     public void find_prime_under_some_number() {
-        final List<Long> reverseList = WELL_KNOWN_FIRST_PRIMES.stream()
-                .filter(p -> p > 2L)
+        final List<Integer> reverseList = WELL_KNOWN_FIRST_PRIMES.stream()
+                .filter(p -> p > 2)
                 .collect(Collectors.toList());
         for (int i = reverseList.size() - 1, j = reverseList.size() - 2; j >= 0; i--, j--) {
-            final @Valid Optional<Long> primefound = primesService.closestPrimeUnder(reverseList.get(i));
+            final @Valid Optional<Integer> primefound = primesService.closestPrimeUnder(reverseList.get(i));
             assertThat(primefound.isPresent())
                     .isTrue();
             assertThat(primefound.get()).isEqualTo(reverseList.get(j));
@@ -48,18 +48,18 @@ public class PrimesServiceTest {
 
     @Test
     public void assert_no_prime_under_param_returns_empty() {
-        assertThat(primesService.closestPrimeUnder(2L))
+        assertThat(primesService.closestPrimeUnder(2))
                 .isEmpty();
     }
 
     @Test
     public void assert_working_after_big_number_provided() {
-        final Optional<Long> result = primesService.closestPrimeUnder(7703L);
+        final Optional<Integer> result = primesService.closestPrimeUnder(7703);
         assertThat(result)
                 .isNotEmpty();
         assertThat(result.get())
                 /* https://www.di-mgt.com.au/primes1000.html */
-                .isEqualTo(7699L);
+                .isEqualTo(7699);
     }
 
 }

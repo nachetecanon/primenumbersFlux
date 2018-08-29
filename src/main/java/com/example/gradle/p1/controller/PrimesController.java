@@ -31,13 +31,13 @@ public class PrimesController {
 
     @Validated
     @GetMapping(path = "/primesunder/{number}")
-    public Mono<Long> getClosestPrimeUnder(@PathVariable Long number) {
+    public Mono<Integer> getClosestPrimeUnder(@PathVariable Integer number) {
         return primesFluxHandler.getClosestPrimeUnder(number);
     }
 
     @Validated
     @GetMapping(path = "/isprime/{number}")
-    public Mono<Boolean> isPrime(@PathVariable Long number) {
+    public Mono<Boolean> isPrime(@PathVariable Integer number) {
         return primesFluxHandler.isPrime(number);
     }
 }

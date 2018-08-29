@@ -13,15 +13,15 @@ public class PrimesFluxHandler {
         this.primesService = primesService;
     }
 
-    Mono<Long> getClosestPrimeUnder(final Long number) {
-        final Optional<Long> result = primesService.closestPrimeUnder(number);
+    Mono<Integer> getClosestPrimeUnder(final Integer number) {
+        final Optional<Integer> result = primesService.closestPrimeUnder(number);
         if (!result.isPresent()) {
             return Mono.error(new PrimeNotFoundException(number));
         }
         return Mono.just(result.get());
     }
 
-    Mono<Boolean> isPrime(final Long number) {
+    Mono<Boolean> isPrime(final Integer number) {
         return Mono.justOrEmpty(primesService.isPrime(number));
     }
 }

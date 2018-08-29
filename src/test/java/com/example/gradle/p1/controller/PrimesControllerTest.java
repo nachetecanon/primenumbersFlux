@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.when;
 
 @RunWith(SpringRunner.class)
@@ -36,20 +36,20 @@ public class PrimesControllerTest {
 
     @Test
     public void testGetClosestPrimeSuccess() {
-        when(primesFluxHandler.getClosestPrimeUnder(anyLong()))
-                .thenReturn(Mono.just(193L));
-        webClient.get().uri(apiBaseUri + "/primesunder/{id}", 123L)
+        when(primesFluxHandler.getClosestPrimeUnder(anyInt()))
+                .thenReturn(Mono.just(193));
+        webClient.get().uri(apiBaseUri + "/primesunder/{id}", 123)
                 .exchange()
                 .expectStatus().isOk()
-                .expectBody(Long.class)
-                .isEqualTo(193L);
+                .expectBody(Integer.class)
+                .isEqualTo(193);
     }
 
     @Test
     public void testGetClosestPrimeFail() {
-        when(primesFluxHandler.getClosestPrimeUnder(anyLong()))
-                .thenThrow(new PrimeNotFoundException(2L));
-        webClient.get().uri(apiBaseUri + "/primesunder/{id}", 2L)
+        when(primesFluxHandler.getClosestPrimeUnder(anyInt()))
+                .thenThrow(new PrimeNotFoundException(2));
+        webClient.get().uri(apiBaseUri + "/primesunder/{id}", 2)
                 .exchange()
                 .expectStatus()
                 .isNotFound()
@@ -59,9 +59,9 @@ public class PrimesControllerTest {
 
     @Test
     public void testIsPrimeOk() {
-        when(primesFluxHandler.isPrime(anyLong()))
+        when(primesFluxHandler.isPrime(anyInt()))
                 .thenReturn(Mono.just(true));
-        webClient.get().uri(apiBaseUri + "/isprime/{number}", 1L)
+        webClient.get().uri(apiBaseUri + "/isprime/{number}", 1)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Boolean.class)
@@ -71,9 +71,9 @@ public class PrimesControllerTest {
 
     @Test
     public void testIsPrimeBad() {
-        when(primesFluxHandler.isPrime(anyLong()))
+        when(primesFluxHandler.isPrime(anyInt()))
                 .thenReturn(Mono.just(false));
-        webClient.get().uri(apiBaseUri + "/isprime/{number}", 1L)
+        webClient.get().uri(apiBaseUri + "/isprime/{number}", 1)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Boolean.class)

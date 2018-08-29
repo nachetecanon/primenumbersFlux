@@ -9,11 +9,11 @@ import java.util.TreeSet;
 
 public class PrimesService {
 
-    public static final Set<Long> WELL_KNOWN_FIRST_PRIMES = new TreeSet<>(Arrays.asList(2L, 3L, 5L, 7L, 11L, 13L, 17L, 19L, 23L, 29L, 31L, 37L, 41L, 43L, 47L, 53L, 59L, 61L, 67L, 71L, 73L, 79L, 83L, 89L, 97L, 101L, 103L, 107L, 109L, 113L, 127L, 131L, 137L, 139L, 149L, 151L, 157L, 163L, 167L, 173L, 179L, 181L, 191L, 193L, 197L, 199L));
+    public static final Set<Integer> WELL_KNOWN_FIRST_PRIMES = new TreeSet<>(Arrays.asList(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199));
 
-    public Optional<Long> closestPrimeUnder(final @NotNull @Min(0) Long param) {
-        final Long from = (param - 1) % 2 == 0 ? param - 2 : param - 1;
-        for (long val = from; val > 1; val -= 2) {
+    public Optional<Integer> closestPrimeUnder(final @NotNull @Min(0) Integer param) {
+        final Integer from = (param - 1) % 2 == 0 ? param - 2 : param - 1;
+        for (Integer val = from; val > 1; val -= 2) {
             if (isPrime(val)) {
                 return Optional.of(val);
             }
@@ -21,12 +21,12 @@ public class PrimesService {
         return Optional.empty();
     }
 
-    public boolean isPrime(final @NotNull @Min(0) Long param) {
-        if (param == 1L || param == 0L) {
+    public boolean isPrime(final @NotNull @Min(0) Integer param) {
+        if (param == 1 || param == 0) {
             return false;
         }
         // first try with well known prime numbers to check if is included
-        final Long max = WELL_KNOWN_FIRST_PRIMES.toArray(new Long[]{})[WELL_KNOWN_FIRST_PRIMES.size() - 1];
+        final Integer max = WELL_KNOWN_FIRST_PRIMES.toArray(new Integer[]{})[WELL_KNOWN_FIRST_PRIMES.size() - 1];
         if (param <= max) {
             if (WELL_KNOWN_FIRST_PRIMES.contains(param)) {
                 return true;
@@ -37,7 +37,7 @@ public class PrimesService {
             return false;
         }
         // third brute-force from last well known prime
-        for (long i = max; i < param - 1; i++) {
+        for (Integer i = max; i < param - 1; i++) {
             if (param % i == 0) {
                 return false;
             }
