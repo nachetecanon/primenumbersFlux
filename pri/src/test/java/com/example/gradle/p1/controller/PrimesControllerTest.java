@@ -1,5 +1,6 @@
 package com.example.gradle.p1.controller;
 
+import com.example.gradle.p1.Base;
 import com.example.gradle.p1.exceptions.PrimeNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ import static org.mockito.BDDMockito.when;
 
 @RunWith(SpringRunner.class)
 @WebFluxTest
-public class PrimesControllerTest {
+public class PrimesControllerTest extends Base {
 
     @Autowired
     private WebTestClient webClient;

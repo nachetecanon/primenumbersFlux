@@ -1,6 +1,7 @@
 package com.example.gradle.p1.controller;
 
 
+import com.example.gradle.p1.Base;
 import com.example.gradle.p1.exceptions.PrimeNotFoundException;
 import com.example.gradle.p1.service.PrimesService;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
@@ -19,7 +21,7 @@ import static org.mockito.BDDMockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class PrimesFluxHandlerTest {
+public class PrimesFluxHandlerTest extends Base {
 
     @Autowired
     private PrimesFluxHandler primesFluxHandler;
@@ -65,6 +67,16 @@ public class PrimesFluxHandlerTest {
         result.subscribe(r -> {
             assertThat(r).isNotNull();
             assertThat(r).isFalse();
+        });
+    }
+
+    @Test
+    public void assert_that_generation_of_primes_works_properly() {
+        when(primesService.generatePrimesTo(anyInt())).thenReturn(WELL_KNOWN_FIRST_PRIMES);
+        final Flux<Integer> result = primesFluxHandler.getPrimeNumbersUntil(10000);
+        result.subscribe(integer -> {
+            assertThat(integer).isNotNull();
+            assertThat(WELL_KNOWN_FIRST_PRIMES.contains(integer));
         });
     }
 }

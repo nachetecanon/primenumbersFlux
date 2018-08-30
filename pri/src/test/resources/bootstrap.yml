@@ -2,4 +2,5 @@
 spring:
   application:
     name: primenumbers
-
+logging:
+  level: info

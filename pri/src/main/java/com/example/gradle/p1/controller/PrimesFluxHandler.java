@@ -2,6 +2,7 @@ package com.example.gradle.p1.controller;
 
 import com.example.gradle.p1.exceptions.PrimeNotFoundException;
 import com.example.gradle.p1.service.PrimesService;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
@@ -23,5 +24,9 @@ public class PrimesFluxHandler {
 
     Mono<Boolean> isPrime(final Integer number) {
         return Mono.justOrEmpty(primesService.isPrime(number));
+    }
+
+    Flux<Integer> getPrimeNumbersUntil(final Integer number) {
+        return Flux.fromStream(primesService.generatePrimesTo(number).stream());
     }
 }

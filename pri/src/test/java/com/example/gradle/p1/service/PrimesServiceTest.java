@@ -1,21 +1,29 @@
 package com.example.gradle.p1.service;
 
+import com.example.gradle.p1.Base;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PrimesServiceTest {
+public class PrimesServiceTest extends Base {
 
+    private final Logger logger = LoggerFactory.getLogger(PrimesServiceTest.class);
     private PrimesService primesService = new PrimesService();
 
     @Test
     public void assert_that_is_prime_works() {
-        assertThat(PrimesService.WELL_KNOWN_FIRST_PRIMES.stream().allMatch(primesService::isPrime))
+        assertThat(WELL_KNOWN_FIRST_PRIMES.stream().allMatch(primesService::isPrime))
                 .isTrue();
     }
 
@@ -33,7 +41,7 @@ public class PrimesServiceTest {
 
     @Test
     public void find_prime_under_some_number() {
-        final List<Long> reverseList = PrimesService.WELL_KNOWN_FIRST_PRIMES.stream()
+        final List<Integer> reverseList = WELL_KNOWN_FIRST_PRIMES.stream()
                 .filter(p -> p > 2L)
                 .collect(Collectors.toList());
         for (int i = reverseList.size() - 1, j = reverseList.size() - 2; j >= 0; i--, j--) {
@@ -43,6 +51,16 @@ public class PrimesServiceTest {
             assertThat(primefound.get()).isEqualTo(reverseList.get(j));
             System.out.println("First prime under " + reverseList.get(i) + " is " + primefound.get());
         }
+    }
+
+    @Test
+    public void find_list_of_primes_under_number() throws Exception {
+        final Set<Integer> expected = new TreeSet<>(Set.of(new ObjectMapper().readValue(new ClassPathResource("10000primes.json").getInputStream(), Integer[].class)));
+        final Set<Integer> result = primesService.generatePrimesTo(expected.stream().reduce((a, b) -> b).orElse(2));
+
+        assertThat(result)
+                .isNotNull()
+                .containsExactlyElementsOf(expected);
     }
 
     @Test
