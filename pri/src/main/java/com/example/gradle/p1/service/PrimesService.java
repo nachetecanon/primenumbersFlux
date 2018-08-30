@@ -19,6 +19,11 @@ public class PrimesService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PrimesService.class);
 
+    /**
+     * searches for the highest prime number below the one passed by param
+     * @param param number to search the just previous prime number
+     * @return optional of Integer with the number or empty
+     */
     public Optional<Integer> closestPrimeUnder(final @NotNull @Min(0) Integer param) {
         final Integer from = (param - 1) % 2 == 0 ? param - 2 : param - 1;
         for (Integer val = from; val > 1; val -= 2) {
@@ -29,6 +34,12 @@ public class PrimesService {
         return Optional.empty();
     }
 
+    /**
+     *
+     * @param param number to check
+     * @return true/false
+     * @see "https://www.baeldung.com/java-generate-prime-numbers"
+     */
     public boolean isPrime(final @NotNull @Min(2) Integer param) {
         return param >= 2 && IntStream.rangeClosed(2, (int) Math.sqrt(param))
                 .filter(n -> (n & 0X1) != 0 && n >= 2)

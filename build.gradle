@@ -36,15 +36,7 @@ subprojects {
 
     jacoco {
         toolVersion = "0.8.1"
-    }
 
-    jacocoTestReport {
-        reports {
-            xml.enabled false
-            csv.enabled false
-            html.destination file("${buildDir}/reports/jacoco/html")
-        }
-        executionData = files("${buildDir}/jacoco/test.exec")
     }
 
     jacocoTestCoverageVerification {
@@ -53,7 +45,7 @@ subprojects {
             rule {
                 enabled = true
                 element = 'CLASS'
-                excludes = ['**/generated/**/*', '**/model/**/*', '**/dto/**/*', '*Configuration.*', '**/.*Exception.*', '**/exceptions/**/*', '**/exception/**/*', '*Application', '*DTO.*']
+                excludes = ['*Exception','*Application']
 
                 limit {
                     counter = 'LINE'
@@ -69,7 +61,18 @@ subprojects {
         }
     }
 
-    check.dependsOn(checkstyleMain)
+    jacocoTestReport {
+        reports {
+            html.enabled true
+        }
+        executionData = files("${buildDir}/jacoco/test.exec")
+
+    }
+
+    jacocoTestReport.dependsOn(jacocoTestCoverageVerification)
+
+    check.dependsOn(checkstyleMain,jacocoTestCoverageVerification,jacocoTestReport)
+
 }
 
 
