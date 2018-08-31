@@ -1,46 +1,4 @@
 ######################################
-#### FIRST IMAGE download artifact ###
-######################################
-FROM openjdk:8-jdk-alpine AS downloader
-
-COPY download_artifact.sh /tmp/
-COPY run.sh /tmp
-COPY waitfor.sh /tmp
-COPY jmxremote.password /tmp
-COPY Base64Util.java /tmp
-
-#Optional parameters for log-in the repository
-ARG REPO_USER="bot-nauthilus"
-ARG REPO_PWD="AKCp5Zko6ju7RMdFs5g9RUC38SdEZ6HxH3bHok2oXwX8cX4ioDLwXpuBiFXFRaS9DXUMru5iM"
-ARG REPO_URL="https://globaldevtools.bbva.com/artifactory/nauthilus-releases"
-
-#Optional parameters: for build images with embedded jar
-ARG GROUP_ID="NONE"
-ARG ARTIFACT_ID="NONE"
-ARG VERSION=LATEST
-#Mandatory. Configuration version
-ARG CONFIG_VERSION="NONE"
-ARG TEMPLATES="NONE"
-ARG TEMPLATES_VERSION="NONE"
-
-RUN set -ex && \
-    mkdir -p /opt/app /opt/repo 2> /dev/null && \
-    mv /tmp/run.sh /opt && \
-    mv /tmp/waitfor.sh /opt && \
-    mv /tmp/jmxremote.password /opt && \
-    mv /tmp/Base64Util.java /opt && \
-    apk add --update --no-cache ca-certificates bash curl git && \
-    chmod +x /tmp/* && \
-    if [ "$GROUP_ID" != "NONE" ] && [ "$ARTIFACT_ID" != "NONE" ]; \
-    then \
-        echo "Embedded War => $GROUP_ID :: $ARTIFACT_ID"; \
-        /tmp/download_artifact.sh ; \
-    else \
-        echo "External War (Defined on running)"; \
-    fi;  \
-    rm /tmp/download_artifact.sh
-
-######################################
 #### SECOND IMAGE configure jdk    ###
 ######################################
 FROM alpine:3.7
@@ -58,7 +16,6 @@ ENV LANG="C.UTF-8" \
     JAVA_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2" \
     SECURITY_COOKIE=96a7b8442fe848ef90c96a2fad6ed6d1
 
-COPY --from=downloader /opt /opt
 
 ARG MONITOR="NONE"
 
