@@ -26,13 +26,13 @@ subprojects {
         configFile = rootProject.file("config/checkstyle/checkstyle.xml")
         source = ['/src/main']
     }
-
+// TODO a ver si se puede generar informe de todo cuando falla
+    // https://github.com/Netflix/spectator/blob/master/build.gradle
     tasks.withType(FindBugs) {
         reports {
             xml.enabled = false
             html.enabled = true
         }
-
     }
 
     findbugsMain {
