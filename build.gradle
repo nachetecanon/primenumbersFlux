@@ -1,9 +1,9 @@
 subprojects {
+    /*apply plugin: 'groovy'*/
     apply plugin: 'java'
     apply plugin: 'checkstyle'
-    apply plugin: 'groovy'
-    apply plugin: 'pmd'
     apply plugin: 'findbugs'
+    apply plugin: 'pmd'
     apply plugin: 'jacoco'
 
     group 'com.valverde.nacho'
@@ -13,20 +13,35 @@ subprojects {
         mavenCentral()
         maven { url "https://repo.spring.io/libs-release" }
         maven { url "https://repo.spring.io/libs-snapshot" }
-//TODO        maven { url "http://central.maven.org/maven2" }
-//TODO        maven { url "http://repo.maven.apache.org/maven2" }
+        maven { url "http://central.maven.org/maven2" }
+        maven { url "http://repo.maven.apache.org/maven2" }
     }
 
+    sourceCompatibility = 1.10
+    targetCompatibility = 1.10
+
+    checkstyleMain {
+        version = "8.11"
+        ignoreFailures = false
+        configFile = rootProject.file("config/checkstyle/checkstyle.xml")
+        source = ['/src/main']
+    }
+
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+
+    }
+
+    findbugsMain {
+        excludeFilter = file("$projectDir/findbugs/findbugs-exclusions.xml")
+        includeFilter = file("$projectDir/findbugs/findbugs-style.xml")
+    }
 
     jacoco {
         toolVersion = "0.8.1"
-    }
-
-    task unitTest(type: Test) {
-        dependsOn checkstyleMain, pmdMain, findbugsMain, jacocoTestReport, jacocoTestCoverageVerification
-        jacoco {
-            destinationFile = file("$buildDir/reports/jacoco/jacoco.exec")
-        }
     }
 
     jacocoTestCoverageVerification {
@@ -52,15 +67,18 @@ subprojects {
     }
 
     jacocoTestReport {
+
         reports {
-            html.enabled true
+            xml.enabled = false
+            html.enabled = true
         }
-        executionData = files("${buildDir}/jacoco/test.exec")
 
     }
-
-
+    jacocoTestCoverageVerification.dependsOn(jacocoTestReport)
+    check.dependsOn(checkstyleMain, pmdMain, findbugsMain, jacocoTestCoverageVerification)
 }
+
+
 
 
 
