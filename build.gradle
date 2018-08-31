@@ -1,8 +1,7 @@
 subprojects {
-    /*TODO apply plugin: 'groovy'*/
+    apply plugin: 'groovy'
     apply plugin: 'java'
     apply plugin: 'checkstyle'
-    apply plugin: 'pmd'
     apply plugin: 'jacoco'
 
     group 'com.valverde.nacho'
@@ -22,8 +21,12 @@ subprojects {
     checkstyleMain {
         version = "8.11"
         ignoreFailures = false
-        configFile = rootProject.file("config/checkstyle/checkstyle.xml")
-        source = ['/src/main']
+        configFile = rootProject.file("config/java/checkstyle/checkstyle.xml")
+    }
+    checkstyleTest {
+        version = "8.11"
+        ignoreFailures = false
+        configFile = rootProject.file("config/java/checkstyle/checkstyle.xml")
     }
 
     jacoco {
@@ -58,14 +61,8 @@ subprojects {
             html.enabled = true
         }
     }
-    pmd {
-        toolVersion = '5.5.4'
-        ignoreFailures = true
-        sourceSets = [sourceSets.main]
-        ruleSets = [] //TODO ver pom parent
-        ruleSetFiles = rootProject.files("codequality/pmd.xml")
-    }
-    check.dependsOn(checkstyleMain, pmdMain, jacocoTestCoverageVerification)
+
+    check.dependsOn(checkstyleMain, jacocoTestCoverageVerification)
 }
 
 
