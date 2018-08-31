@@ -76,7 +76,8 @@ public class PrimesFluxHandlerTest extends Base {
         final Flux<Integer> result = primesFluxHandler.getPrimeNumbersUntil(10000);
         result.subscribe(integer -> {
             assertThat(integer).isNotNull();
-            assertThat(WELL_KNOWN_FIRST_PRIMES.contains(integer));
+            assertThat(WELL_KNOWN_FIRST_PRIMES.contains(integer))
+             .isTrue();
         });
     }
 }

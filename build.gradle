@@ -58,6 +58,13 @@ subprojects {
             html.enabled = true
         }
     }
+    pmd {
+        toolVersion = '5.5.4'
+        ignoreFailures = true
+        sourceSets = [sourceSets.main]
+        ruleSets = [] //TODO ver pom parent
+        ruleSetFiles = rootProject.files("codequality/pmd.xml")
+    }
     check.dependsOn(checkstyleMain, pmdMain, jacocoTestCoverageVerification)
 }
 
