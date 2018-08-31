@@ -1,6 +1,6 @@
 subprojects {
-    apply plugin: 'groovy'
     apply plugin: 'java'
+    apply plugin: 'pmd'
     apply plugin: 'checkstyle'
     apply plugin: 'jacoco'
 
@@ -15,8 +15,8 @@ subprojects {
         maven { url "http://repo.maven.apache.org/maven2" }
     }
 
-    sourceCompatibility = 1.10
-    targetCompatibility = 1.10
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
     checkstyleMain {
         version = "8.11"
@@ -61,8 +61,17 @@ subprojects {
             html.enabled = true
         }
     }
+    pmdMain {
+        version = '4.10'
+        ignoreFailures = false
+        ruleSetConfig = rootProject.resources.text.fromFile("config/java/pmd/ruleset.xml")
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
 
-    check.dependsOn(checkstyleMain, jacocoTestCoverageVerification)
+    check.dependsOn(checkstyleMain, pmdMain, jacocoTestCoverageVerification)
 }
 
 
