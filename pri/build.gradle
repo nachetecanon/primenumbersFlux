@@ -15,7 +15,7 @@ apply plugin: 'io.spring.dependency-management'
 project.version = '0.0.0-SNAPSHOT'
 project.description = 'P1 project'
 
-mainClassName='com.example.gradle.p1.Demo'
+mainClassName = 'com.example.gradle.p1.DemoApplication'
 applicationName = 'primenumbersFlux'
 
 

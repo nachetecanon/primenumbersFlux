@@ -2,7 +2,6 @@ package com.example.gradle.p1.service;
 
 import com.example.gradle.p1.Base;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-@Ignore
+
 public class PrimesServiceTest extends Base {
 
     private final Logger logger = LoggerFactory.getLogger(PrimesServiceTest.class);

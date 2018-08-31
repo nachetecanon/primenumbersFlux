@@ -1,8 +1,7 @@
 subprojects {
-    /*apply plugin: 'groovy'*/
+    /*TODO apply plugin: 'groovy'*/
     apply plugin: 'java'
     apply plugin: 'checkstyle'
-    apply plugin: 'findbugs'
     apply plugin: 'pmd'
     apply plugin: 'jacoco'
 
@@ -26,25 +25,13 @@ subprojects {
         configFile = rootProject.file("config/checkstyle/checkstyle.xml")
         source = ['/src/main']
     }
-// TODO a ver si se puede generar informe de todo cuando falla
-    // https://github.com/Netflix/spectator/blob/master/build.gradle
-    tasks.withType(FindBugs) {
-        reports {
-            xml.enabled = false
-            html.enabled = true
-        }
-    }
-
-    findbugsMain {
-        excludeFilter = file("$projectDir/findbugs/findbugs-exclusions.xml")
-        includeFilter = file("$projectDir/findbugs/findbugs-style.xml")
-    }
 
     jacoco {
         toolVersion = "0.8.1"
     }
 
     jacocoTestCoverageVerification {
+        dependsOn(jacocoTestReport)
         violationRules {
             failOnViolation = true
             rule {
@@ -65,25 +52,14 @@ subprojects {
             }
         }
     }
-
     jacocoTestReport {
-
         reports {
             xml.enabled = false
             html.enabled = true
         }
-
     }
-    jacocoTestCoverageVerification.dependsOn(jacocoTestReport)
-    check.dependsOn(checkstyleMain, pmdMain, findbugsMain, jacocoTestCoverageVerification)
+    check.dependsOn(checkstyleMain, pmdMain, jacocoTestCoverageVerification)
 }
-
-
-
-
-
-
-
 
 
 configure(subprojects.findAll()) {
