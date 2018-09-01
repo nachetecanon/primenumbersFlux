@@ -20,6 +20,7 @@
         <cobertura.skip>false</cobertura.skip>
         <cobertura-branch.rate>95%</cobertura-branch.rate>
         <cobertura-line.rate>95%</cobertura-line.rate>
+        <primeservices.version>${parent.version}</primeservices.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-restdocs.version>2.0.2.RELEASE</spring-restdocs.version>
@@ -27,7 +28,8 @@
         <restdocs.version>2.0.2.RELEASE</restdocs.version>
     </properties>
     <modules>
-        <module>pri</module>
+        <module>priapplication</module>
+        <module>primeservices</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -99,10 +101,6 @@
                         <exclude>**/*App.java</exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
