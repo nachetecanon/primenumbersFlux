@@ -64,6 +64,16 @@ public class PrimesServiceTest extends Base {
     }
 
     @Test
+    public void find_list_of_primes_under_null_at_least_returns_the_first() throws Exception {
+        final Set<Integer> expected = new TreeSet<>(Set.of(2));
+        final Set<Integer> result = primesService.generatePrimesTo(null);
+
+        assertThat(result)
+                .isNotNull()
+                .containsExactlyElementsOf(expected);
+    }
+
+    @Test
     public void assert_no_prime_under_param_returns_empty() {
         assertThat(primesService.closestPrimeUnder(2))
                 .isEmpty();
