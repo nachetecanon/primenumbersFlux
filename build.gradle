@@ -15,10 +15,11 @@ subprojects {
         maven { url "http://repo.maven.apache.org/maven2" }
     }
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 1.9
+    targetCompatibility = 1.9
 
-
+    group='com.valverde.nacho'
+    version = '1.0'
 
     checkstyleMain {
         version = "8.11"
@@ -74,13 +75,13 @@ subprojects {
     }
 
     check.dependsOn(checkstyleMain, pmdMain, jacocoTestCoverageVerification)
-}
-
-
-configure(subprojects.findAll()) {
-    test {
-        onlyIf {
-            !(project.name =~ /.*-test.*/)
+    configure(subprojects.findAll()) {
+        test {
+            onlyIf {
+                !(project.name =~ /.*-test.*/)
+            }
         }
     }
 }
+
+

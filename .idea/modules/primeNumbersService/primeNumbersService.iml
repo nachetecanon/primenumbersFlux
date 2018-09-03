@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":primeNumbersService" external.linked.project.path="$MODULE_DIR$/../../../primeNumbersService" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="com.valverde.nacho" external.system.module.version="4.10" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../primeNumbersService">
+      <excludeFolder url="file://$MODULE_DIR$/../../../primeNumbersService/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../primeNumbersService/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../../../primeNumbersService/out" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

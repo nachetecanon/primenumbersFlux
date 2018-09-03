@@ -19,11 +19,10 @@ ext {
 }
 ext['spring-restdocs.version'] = '2.0.2.RELEASE'
 
-project.version = '0.0.0-SNAPSHOT'
-project.description = 'P1 project'
+project.description = 'P1 project - Service'
 
 mainClassName = 'com.example.gradle.p1.DemoApplication'
-applicationName = 'primenumbersFlux'
+applicationName = 'primeNumberService'
 
 
 dependencies {
@@ -53,15 +52,9 @@ jar {
     }
 }
 
-//TODO just because this is java code and 1.8
 startScripts {
     doLast {
-        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""','DEFAULT_JVM_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"')
-    }
-}
-bootStartScripts {
-    doLast {
-        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""','DEFAULT_JVM_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"')
+        unixScript.text = unixScript.text.replace('$PRIME_SERVICE_OPTS=""', '$PRIME_SERVICE_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"')
     }
 }
 
