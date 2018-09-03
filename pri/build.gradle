@@ -1,13 +1,28 @@
+buildscript {
+    dependencies {
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE"
+    }
+}
+
 plugins {
     id "org.springframework.boot" version "2.0.4.RELEASE"
+    id "org.asciidoctor.convert" version "1.5.3"
 }
+
+apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'io.spring.dependency-management'
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+
+}
+ext['spring-restdocs.version'] = '2.0.2.RELEASE'
 
 project.version = '0.0.0-SNAPSHOT'
 project.description = 'P1 project'
 
-mainClassName='com.example.gradle.p1.Demo'
+mainClassName = 'com.example.gradle.p1.DemoApplication'
 applicationName = 'primenumbersFlux'
 
 
@@ -16,11 +31,37 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-actuator'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testCompile group: 'io.projectreactor', name: 'reactor-test'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.15'
+    testCompile "org.springframework.restdocs:spring-restdocs-webtestclient:${project.ext['spring-restdocs.version']}"
+    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:${project.ext['spring-restdocs.version']}"
 }
 
-repositories {
-    maven { url "https://repo.spring.io/libs-release" }
-    maven { url "https://repo.spring.io/libs-snapshot" }
-    maven { url "http://central.maven.org/maven2" }
-    maven { url "http://repo.maven.apache.org/maven2" }
+test {
+    outputs.dir snippetsDir
 }
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+jar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
+//TODO just because this is java code and 1.8
+startScripts {
+    doLast {
+        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""','DEFAULT_JVM_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"')
+    }
+}
+bootStartScripts {
+    doLast {
+        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""','DEFAULT_JVM_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"')
+    }
+}
+

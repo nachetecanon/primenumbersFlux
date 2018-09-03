@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
-@RequestMapping(path = "/api/${api.version:-v0}")
+@RequestMapping(path = "/api/${api.version:v0}")
 @RestController
 public class PrimesController {
 
@@ -39,5 +40,11 @@ public class PrimesController {
     @GetMapping(path = "/isprime/{number}")
     public Mono<Boolean> isPrime(@PathVariable Integer number) {
         return primesFluxHandler.isPrime(number);
+    }
+
+    @Validated
+    @GetMapping(path = "/firstnprimes/{number}")
+    public Flux<Integer> getPrimesUnderValue(@PathVariable Integer number) {
+        return primesFluxHandler.getPrimeNumbersUntil(number);
     }
 }

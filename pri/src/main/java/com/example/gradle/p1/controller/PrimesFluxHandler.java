@@ -6,6 +6,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
+import java.util.Set;
 
 public class PrimesFluxHandler {
     private final PrimesService primesService;
@@ -27,6 +28,8 @@ public class PrimesFluxHandler {
     }
 
     Flux<Integer> getPrimeNumbersUntil(final Integer number) {
-        return Flux.fromStream(primesService.generatePrimesTo(number).stream());
+        final Set<Integer> primesList = primesService.generatePrimesTo(number);
+        return Flux.fromStream(primesList.stream());
+
     }
 }

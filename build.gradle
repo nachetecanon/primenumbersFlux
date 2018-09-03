@@ -1,51 +1,48 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url "https://repo.spring.io/libs-release" }
-        maven { url "https://repo.spring.io/libs-snapshot" }
-    }
-    dependencies {
-
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE"
-    }
-}
-apply plugin: "io.spring.dependency-management"
-apply plugin: 'java'
-
-dependencyManagement {
-    imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Finchley.SR1'
-    }
-}
-
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'groovy'
-    apply plugin: 'checkstyle'
     apply plugin: 'pmd'
+    apply plugin: 'checkstyle'
     apply plugin: 'jacoco'
 
     group 'com.valverde.nacho'
 
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://repo.spring.io/libs-release" }
+        maven { url "https://repo.spring.io/libs-snapshot" }
+        maven { url "http://central.maven.org/maven2" }
+        maven { url "http://repo.maven.apache.org/maven2" }
+    }
 
-    dependencies {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 
-        compile 'org.codehaus.groovy:groovy-all:2.5.2'
-        testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+
+
+    checkstyleMain {
+        version = "8.11"
+        ignoreFailures = false
+        configFile = rootProject.file("config/java/checkstyle/checkstyle.xml")
+    }
+    checkstyleTest {
+        version = "8.11"
+        ignoreFailures = false
+        configFile = rootProject.file("config/java/checkstyle/checkstyle.xml")
     }
 
     jacoco {
         toolVersion = "0.8.1"
-
     }
 
     jacocoTestCoverageVerification {
+        dependsOn(jacocoTestReport)
         violationRules {
             failOnViolation = true
             rule {
                 enabled = true
                 element = 'CLASS'
-                excludes = ['*Exception','*Application']
+                excludes = ['*Exception', '*Application']
 
                 limit {
                     counter = 'LINE'
@@ -60,19 +57,30 @@ subprojects {
             }
         }
     }
-
     jacocoTestReport {
         reports {
-            html.enabled true
+            xml.enabled = false
+            html.enabled = true
         }
-        executionData = files("${buildDir}/jacoco/test.exec")
-
+    }
+    pmdMain {
+        version = '4.10'
+        ignoreFailures = false
+        ruleSetConfig = rootProject.resources.text.fromFile("config/java/pmd/ruleset.xml")
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
     }
 
-    jacocoTestReport.dependsOn(jacocoTestCoverageVerification)
-
-    check.dependsOn(checkstyleMain,jacocoTestCoverageVerification,jacocoTestReport)
-
+    check.dependsOn(checkstyleMain, pmdMain, jacocoTestCoverageVerification)
 }
 
 
+configure(subprojects.findAll()) {
+    test {
+        onlyIf {
+            !(project.name =~ /.*-test.*/)
+        }
+    }
+}
