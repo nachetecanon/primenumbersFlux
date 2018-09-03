@@ -17,6 +17,10 @@ subprojects {
 
     ext { springBootVersion = '2.0.4.RELEASE'}
 
+    dependencyManagement {
+        imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+    }
+
     sourceCompatibility = JavaVersion.VERSION_1_10
     targetCompatibility = JavaVersion.VERSION_1_10
 
@@ -84,6 +88,8 @@ subprojects {
             }
         }
     }
+
+
 }
 
 
