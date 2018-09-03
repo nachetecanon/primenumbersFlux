@@ -1,10 +1,4 @@
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'pmd'
-    apply plugin: 'checkstyle'
-    apply plugin: 'jacoco'
-
-    group 'com.valverde.nacho'
 
     repositories {
         mavenLocal()
@@ -14,9 +8,17 @@ subprojects {
         maven { url "http://central.maven.org/maven2" }
         maven { url "http://repo.maven.apache.org/maven2" }
     }
+    apply plugin: 'java'
+    apply plugin: 'pmd'
+    apply plugin: 'checkstyle'
+    apply plugin: 'jacoco'
 
-    sourceCompatibility = 1.9
-    targetCompatibility = 1.9
+    group 'com.valverde.nacho'
+
+    ext { springBootVersion = '2.0.4.RELEASE'}
+
+    sourceCompatibility = JavaVersion.VERSION_1_10
+    targetCompatibility = JavaVersion.VERSION_1_10
 
     group='com.valverde.nacho'
     version = '1.0'

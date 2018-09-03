@@ -1,60 +1,23 @@
 buildscript {
-    dependencies {
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.5.RELEASE"
-    }
+    repositories { mavenCentral()}
 }
-
 plugins {
-    id "org.springframework.boot" version "2.0.4.RELEASE"
-    id "org.asciidoctor.convert" version "1.5.3"
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
 }
-
 apply plugin: 'java'
-apply plugin: 'application'
 apply plugin: 'io.spring.dependency-management'
 
-ext {
-    snippetsDir = file('build/generated-snippets')
-
-}
-ext['spring-restdocs.version'] = '2.0.2.RELEASE'
 
 project.description = 'P1 project - Service'
 
-mainClassName = 'com.example.gradle.p1.DemoApplication'
-applicationName = 'primeNumberService'
-
-
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
-    compile group: 'org.springframework.boot', name: 'spring-boot-actuator'
+    compile 'javax.validation:validation-api:2.0.1.Final'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    testCompile group: 'io.projectreactor', name: 'reactor-test'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     testCompile 'org.codehaus.groovy:groovy-all:2.4.15'
-    testCompile "org.springframework.restdocs:spring-restdocs-webtestclient:${project.ext['spring-restdocs.version']}"
-    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:${project.ext['spring-restdocs.version']}"
 }
 
-test {
-    outputs.dir snippetsDir
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
 }
-
-asciidoctor {
-    inputs.dir snippetsDir
-    dependsOn test
-}
-
-jar {
-    dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
-        into 'static/docs'
-    }
-}
-
-startScripts {
-    doLast {
-        unixScript.text = unixScript.text.replace('$PRIME_SERVICE_OPTS=""', '$PRIME_SERVICE_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"')
-    }
-}
-
