@@ -1,14 +1,10 @@
-
 plugins {
     id "org.springframework.boot" version "2.0.4.RELEASE"
     id "org.asciidoctor.convert" version "1.5.3"
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
-
 }
 
 apply plugin: 'java'
 apply plugin: 'application'
-apply plugin: 'io.spring.dependency-management'
 
 ext {
     snippetsDir = file('build/generated-snippets')
@@ -19,6 +15,7 @@ ext['spring-restdocs.version'] = '2.0.2.RELEASE'
 project.description = 'P1 project - Application'
 
 mainClassName = 'com.example.gradle.p1.DemoApplication'
+applicationName = "primeNumbersApplication"
 
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
@@ -49,15 +46,17 @@ jar {
     }
 }
 
-//TODO just because this is java code and 1.8
 startScripts {
     doLast {
-        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"')
+        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:MaxRAMFraction=2"')
     }
 }
+
 bootStartScripts {
     doLast {
-        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2"')
+        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:MaxRAMFraction=2"')
     }
 }
+
+
 

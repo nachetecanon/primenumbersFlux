@@ -8,11 +8,11 @@ import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class PrimesService {
@@ -50,7 +50,7 @@ public class PrimesService {
     public Set<Integer> generatePrimesTo(final Integer end) {
         Instant t1 = Instant.now();
         final Integer omega = Optional.ofNullable(end).orElse(2);
-        Set<Integer> result = Set.of(omega);
+        Set<Integer> result = new TreeSet<>(Collections.singleton(omega));
         if (Optional.ofNullable(end).isPresent()) {
             result = sieveOfEratosthenes(end);
         }
@@ -68,18 +68,20 @@ public class PrimesService {
     private Set<Integer> sieveOfEratosthenes(final Integer end) {
         final List<Boolean> primes = new ArrayList<>(end + 1);
         IntStream.rangeClosed(0, end + 1).boxed().forEach(index -> primes.add(Boolean.TRUE));
-        IntStream.iterate(2, op -> op * op <= end, op -> op = op + 1)
-                .boxed()
-                .forEach(p -> {
-                    if (isPrime(p)) {
-                        IntStream.iterate(p * 2, operand -> operand <= end, operand -> operand += p)
-                                .forEach(value -> primes.set(value, Boolean.FALSE));
-                    }
-                });
-        return IntStream.iterate(2, i -> i <= end, i -> i = i + 1)
-                .boxed()
-                .filter(primes::get)
-                .collect(Collectors.toCollection(TreeSet::new));
+        for (int p = 2; p * p <= end; p++) {
+            if (isPrime(p)) {
+                for (int i = p * 2; i <= end; i += p) {
+                    primes.set(i, Boolean.FALSE);
+                }
+            }
+        }
+        Set<Integer> primeNumbers = new TreeSet<>();
+        for (int i = 2; i <= end; i++) {
+            if (primes.get(i)) {
+                primeNumbers.add(i);
+            }
+        }
+        return primeNumbers;
     }
 
 
