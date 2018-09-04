@@ -4,4 +4,4 @@
 # This is used to run sdkman in Dockerfile RUN commands
 # since the RUN commands does not use interactive shells
 
-[[ -s "//root/.sdkman/bin/sdkman-init.sh" ]] && source "//root/.sdkman/bin/sdkman-init.sh" && exec "$@"
+[[ -s "/${HOME}/.sdkman/bin/sdkman-init.sh" ]] && source "/${HOME}/.sdkman/bin/sdkman-init.sh" && exec "$@"

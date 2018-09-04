@@ -4,18 +4,24 @@
 FROM ubuntu:latest as downloading_phase
 
 ENV JAVA_VERSION=10.0.2-oracle
+ENV HOME=/home/predictx
 
 RUN set -ex && \
     apt update -y && \
-    apt install bash ca-certificates tar bash curl unzip zip -y
+    apt install bash ca-certificates tar bash curl unzip zip -y && \
+    useradd -m -s /bin/bash predictx && \
+    mkdir -p ${HOME}/bin
 
-RUN curl -sk "https://get.sdkman.io" | bash
 
-COPY autoconfig /.sdkman/etc/config
-COPY bin /usr/local/bin
+RUN  curl -sk "https://get.sdkman.io" | bash
 
-RUN /bin/bash -c "chmod +x /usr/local/bin/sdkman-exec.sh && chmod +x /usr/local/bin/sdkman-wrapper.sh && chmod +x //root/.sdkman/bin/sdkman-init.sh"
-RUN /bin/bash -c "source /root/.sdkman/bin/sdkman-init.sh && /usr/local/bin/sdkman-wrapper.sh install java ${JAVA_VERSION}"
+COPY --chown=predictx autoconfig ${HOME}/.sdkman/etc/config
+COPY --chown=predictx bin/* ${HOME}/bin/
 
+RUN  chmod +x ${HOME}/.sdkman/bin/sdkman-init.sh && \
+     chmod +x ${HOME}/bin/sdkman-wrapper.sh && \
+     ${HOME}/bin/sdkman-wrapper.sh install java ${JAVA_VERSION}
+
+USER predictx
 
 
