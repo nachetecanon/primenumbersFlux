@@ -20,8 +20,13 @@ COPY --chown=predictx bin/* ${HOME}/bin/
 
 RUN  chmod +x ${HOME}/.sdkman/bin/sdkman-init.sh && \
      chmod +x ${HOME}/bin/sdkman-wrapper.sh && \
-     ${HOME}/bin/sdkman-wrapper.sh install java ${JAVA_VERSION}
+     ${HOME}/bin/sdkman-wrapper.sh install java ${JAVA_VERSION} && \
+     find / -name "*.gz" -exec rm -fR {} \; 2> /dev/null && \
+     find / -name "*.zip" -exec rm -fR {} \; 2> /dev/null && \
+     find / -name "*.tar" -exec rm -fR {} \; 2> /dev/null
 
 USER predictx
+
+
 
 
