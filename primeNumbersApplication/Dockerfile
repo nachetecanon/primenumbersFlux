@@ -57,9 +57,11 @@ RUN  chmod +x ${HOME}/.sdkman/bin/sdkman-init.sh && \
                 ${HOME}/.sdkman/candidates/java/current/lib/ext/nashorn.jar \
                 ${HOME}/.sdkman/candidates/java/current/lib/oblique-fonts \
                 ${HOME}/.sdkman/candidates/java/current/lib/plugin.jar \
-                /var/cache/apk/*  \
-                /tmp/*.apk
-USER predictx
+                ${HOME}/.sdkman/bin \
+                ${HOME}/.sdkman/var \
+                ${HOME}/.sdkman/tmp \
+                ${HOME}/.sdkman/archives \
+                /tmp/*.apk ${HOME}/.sdkman/*.sh
 
 ############################################################
 ##### installation of final artifact with alpine       #####
@@ -67,24 +69,25 @@ USER predictx
 FROM alpine:latest
 
 ARG JAVA_VERSION=10.0.2-oracle
-ENV HOME=/home/predictx
-ENV JAVA_HOME=${HOME}/.sdkman/candidates/java/current
-ENV PATH=${PATH}:${JAVA_HOME}/bin
+ENV HOME=/home/predictx \
+    JAVA_HOME=/home/predictx/.sdkman/candidates/java/current \
+    PATH=${PATH}:/home/predictx/.sdkman/candidates/java/current/bin \
+    GLIBC_VERSION="2.28-r0"
 
-
-COPY --from=downloading_phase ${HOME}/ ${HOME}/
+COPY --from=downloading_phase ${HOME}/ /home/predictx/
 
 RUN set -ex && \
-    apk add --update --no-cache ca-certificates tar bash curl && \
+    apk add --no-cache bash && \
+    apk add --no-cache --allow-untrusted /tmp/*.apk && \
     adduser -D -s /bin/bash predictx && \
     mkdir -p /opt /home/predictx/bin && \
     chown -R predictx:predictx /tmp /opt /home/predictx && \
     find / -name "*.gz" -exec rm -fR {} \; 2> /dev/null && \
     find / -name "*.zip" -exec rm -fR {} \; 2> /dev/null && \
     find / -name "*.tar" -exec rm -fR {} \; 2> /dev/null && \
-    rm -fr /var/cache/apk/*
+    rm -fr /var/cache/apk/* /tmp/*.apk ${HOME}/bin
 
-#USER predictx
+USER predictx
 
 #HEALTHCHECK
 #ENTRYPOINT ["/"]
