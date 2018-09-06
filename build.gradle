@@ -37,9 +37,9 @@ subprojects {
             mavenBom 'io.spring.platform:platform-bom:Cairo-SR3'
         }
     }
-    // TODO, test with 1.10
-    sourceCompatibility = JavaVersion.VERSION_1_10
-    targetCompatibility = JavaVersion.VERSION_1_10
+
+    sourceCompatibility = '1.10'
+    targetCompatibility = '1.10'
 
     version = '1.0'
 
