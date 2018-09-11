@@ -1,0 +1,68 @@
+= Project for prime numbers handling
+Ignacio Cañón;
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc:
+
+
+It pretends to be a sample application demonstrating the spring-webflux reactor solution for exposing several endpoints.
+It also includes gradle plugins in order to control the quality of the code.
+
+== Api
+
+There are exposed three functionality endpoints:
+
+=== Checking if a number is or not a prime number
+
+Instruction to make the call with cURL:
+
+include::{snippets}/checkingIsPrime/curl-request.adoc[]
+
+Instruction to make the call with HTTPie:
+
+include::{snippets}/checkingIsPrime/httpie-request.adoc[]
+
+HTTP request:
+
+include::{snippets}/checkingIsPrime/http-request.adoc[]
+
+HTTP response:
+
+include::{snippets}/checkingIsPrime/http-response.adoc[]
+
+=== Search first prime number under the one passed by parameter
+
+Instruction to make the call with cURL:
+
+include::{snippets}/firstprimeunder/curl-request.adoc[]
+
+Instruction to make the call with HTTPie:
+
+include::{snippets}/firstprimeunder/httpie-request.adoc[]
+
+HTTP request:
+
+include::{snippets}/firstprimeunder/http-request.adoc[]
+
+HTTP response:
+
+include::{snippets}/firstprimeunder/http-response.adoc[]
+
+=== List number of first N numbers, being N the parameter passed
+
+Instruction to make the call with cURL:
+
+include::{snippets}/generatingPrimes/curl-request.adoc[]
+
+Instruction to make the call with HTTPie:
+
+include::{snippets}/generatingPrimes/httpie-request.adoc[]
+
+HTTP request:
+
+include::{snippets}/generatingPrimes/http-request.adoc[]
+
+HTTP response:
+
+include::{snippets}/generatingPrimes/http-response.adoc[]

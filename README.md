@@ -7,3 +7,5 @@ doc
 postman
 gatling
 integration tests
+docker
+package distribution

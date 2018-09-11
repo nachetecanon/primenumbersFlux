@@ -1,0 +1,56 @@
+plugins {
+    id "org.springframework.boot" version "2.0.4.RELEASE"
+    id "org.asciidoctor.convert" version "1.5.3"
+}
+
+apply plugin: 'java'
+
+apply plugin: 'application'
+
+ext {
+    snippetsDir = file('build/generated-snippets')
+
+}
+ext['spring-restdocs.version'] = '2.0.2.RELEASE'
+
+project.description = 'P1 project - Application'
+
+mainClassName = 'com.example.gradle.p1.DemoApplication'
+applicationName = "primeNumbersApplication"
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
+    compile group: 'org.springframework.boot', name: 'spring-boot-actuator'
+    compile project(':primeNumbersService:')
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    testCompile group: 'org.springframework.cloud', name: 'spring-cloud-client'
+    testCompile group: 'io.projectreactor', name: 'reactor-test'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.15'
+    testCompile "org.springframework.restdocs:spring-restdocs-webtestclient:${project.ext['spring-restdocs.version']}"
+    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:${project.ext['spring-restdocs.version']}"
+}
+
+test {
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+jar {
+    dependsOn asciidoctor
+    from("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+}
+
+bootStartScripts {
+    doLast {
+        unixScript.text = unixScript.text.replace('DEFAULT_JVM_OPTS=""', 'DEFAULT_JVM_OPTS="-XshowSettings:vm -Djava.security.egd=file:///dev/./urandom -XX:+UseG1GC -XX:MaxGCPauseMillis=200 -XX:ParallelGCThreads=20 -XX:ConcGCThreads=5 -XX:InitiatingHeapOccupancyPercent=70 -XX:MaxRAMFraction=2"')
+    }
+}
+
+
