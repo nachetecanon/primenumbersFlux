@@ -7,8 +7,9 @@ ARG JAVA_VERSION=10.0.2-oracle
 ENV HOME=/home/predictx
 
 RUN set -ex && \
-    apk add --no-cache bash curl unzip zip tar  && \
-    adduser -D -s /bin/bash predictx && \
+    apt update -y && \
+    apt install bash ca-certificates tar bash curl unzip zip -y && \
+    useradd -m -s /bin/bash predictx && \
     mkdir -p ${HOME}/bin
 
 
@@ -21,11 +22,11 @@ ADD  --chown=predictx:predictx build/distributions/primeNumbersApplication-boot-
 
 RUN  chmod +x ${HOME}/.sdkman/bin/sdkman-init.sh && \
      chmod +x ${HOME}/bin/sdkman-wrapper.sh && \
-     chown -R predictx:predictx ${HOME} && \
-     ${HOME}/bin/sdkman-wrapper.sh install java ${JAVA_VERSION}
-
-
-RUN  rm -rf ${HOME}/.sdkman/candidates/java/current/*src.zip \
+     ${HOME}/bin/sdkman-wrapper.sh install java ${JAVA_VERSION} && \
+     find / -name "*.gz" -exec rm -fR {} \; 2> /dev/null && \
+     find / -name "*.zip" -exec rm -fR {} \; 2> /dev/null && \
+     find / -name "*.tar" -exec rm -fR {} \; 2> /dev/null && \
+     rm -rf ${HOME}/.sdkman/candidates/java/current/*src.zip \
                 ${HOME}/.sdkman/candidates/java/current/lib/missioncontrol \
                 ${HOME}/.sdkman/candidates/java/current/lib/visualvm \
                 ${HOME}/.sdkman/candidates/java/current/lib/*javafx* \
@@ -56,18 +57,41 @@ RUN  rm -rf ${HOME}/.sdkman/candidates/java/current/*src.zip \
                 ${HOME}/.sdkman/candidates/java/current/lib/ext/nashorn.jar \
                 ${HOME}/.sdkman/candidates/java/current/lib/oblique-fonts \
                 ${HOME}/.sdkman/candidates/java/current/lib/plugin.jar \
+                ${HOME}/.sdkman/bin \
                 ${HOME}/.sdkman/var \
                 ${HOME}/.sdkman/tmp \
-                ${HOME}/.sdkman/archives && \
-                find / -name "*.gz" -exec rm -fR {} \; 2> /dev/null && \
-                find / -name "*.zip" -exec rm -fR {} \; 2> /dev/null && \
-                find / -name "*.tar" -exec rm -fR {} \; 2> /dev/null && \
-                rm -fr /var/cache/apk/* /tmp/*.apk 2> /dev/null
+                ${HOME}/.sdkman/archives \
+                /tmp/*.apk ${HOME}/.sdkman/*.sh
+
+############################################################
+##### installation of final artifact with alpine       #####
+############################################################
+FROM alpine:latest
+
+ARG JAVA_VERSION=10.0.2-oracle
+ENV HOME=/home/predictx \
+    JAVA_HOME=/home/predictx/.sdkman/candidates/java/current \
+    PATH=${PATH}:/home/predictx/.sdkman/candidates/java/current/bin \
+    GLIBC_VERSION="2.28-r0"
+
+COPY --from=downloading_phase ${JAVA_HOME}/ /home/predictx/.sdkman/candidates/java/current
+COPY --from=downloading_phase ${HOME}/bin/* ${HOME}/bin/
+
+RUN set -ex && \
+    apk add --no-cache bash && \
+    apk add --no-cache --allow-untrusted ${HOME}/bin/*.apk && \
+    adduser -D -s /bin/bash predictx && \
+    mkdir -p /opt /home/predictx/bin && \
+    chown -R predictx:predictx /tmp /opt /home/predictx && \
+    find / -name "*.gz" -exec rm -fR {} \; 2> /dev/null && \
+    find / -name "*.zip" -exec rm -fR {} \; 2> /dev/null && \
+    find / -name "*.tar" -exec rm -fR {} \; 2> /dev/null && \
+    rm -fr /var/cache/apk/* /tmp/*.apk ${HOME}/bin 2> /dev/null
 
 USER predictx
 
 #HEALTHCHECK
-#ENTRYPOINT ["/home/predictx/.sdkman/bin/sdkman-init.sh"]
+#ENTRYPOINT ["/"]
 
 
 
