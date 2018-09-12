@@ -61,7 +61,8 @@ USER predictx
 
 
 #HEALTHCHECK
-#ENTRYPOINT ["/home/predictx/.sdkman/bin/sdkman-init.sh"]
+ENTRYPOINT /home/predictx/primeNumbersApplication-boot-4.10/bin/primeNumbersApplication
+
 
 
 
