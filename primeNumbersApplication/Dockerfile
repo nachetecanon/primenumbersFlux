@@ -32,13 +32,11 @@ RUN  rm -rf ${HOME}/.sdkman/var \
             ${HOME}/.sdkman/src \
             ${HOME}/.sdkman/tmp \
             ${HOME}/.sdkman/etc \
-            ${HOME}/.sdkman/archives && \
-            find / -name "*.gz" -exec rm -fR {} \; 2> /dev/null && \
-            find / -name "*.zip" -exec rm -fR {} \; 2> /dev/null && \
-            find / -name "*.tar" -exec rm -fR {} \; 2> /dev/null && \
-            rm -fr /var/cache/apk/* /tmp/*.apk 2> /dev/null
+            ${HOME}/.sdkman/archives
 
-
+############################################################
+##### leave only what's needed ...                     #####
+############################################################
 FROM bitnami/minideb:stretch
 
 ARG JAVA_VERSION=10.0.2-open
@@ -47,17 +45,21 @@ ENV HOME=/home/predictx \
     JAVA_HOME=/opt/jdk/${JAVA_VERSION} \
     PATH=${PATH}:/opt/jdk/${JAVA_VERSION}/bin
 
-COPY bin/*.apk /tmp/
+
+
 
 RUN set -ex && \
-    mkdir -p ${HOME}/bin && \
-    useradd -d /home/predictx -s /bin/bash predictx
+    useradd -d /home/predictx -s /bin/bash predictx  && \
+    find / -name "*.gz" -exec rm -fR {} \; 2> /dev/null && \
+    find / -name "*.zip" -exec rm -fR {} \; 2> /dev/null && \
+    find / -name "*.tar" -exec rm -fR {} \; 2> /dev/null && \
+    rm -fR /tmp/* 2> /dev/null
 
 COPY --from=downloading_phase --chown=predictx:predictx /home/predictx/.sdkman/candidates/java/ /opt/jdk/
 ADD  --chown=predictx:predictx build/distributions/primeNumbersApplication-boot-4.10.tar ${HOME}
 
-
 USER predictx
+
 
 ENTRYPOINT /home/predictx/primeNumbersApplication-boot-4.10/bin/primeNumbersApplication
 
