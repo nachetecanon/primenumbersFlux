@@ -1,19 +1,19 @@
 ############################################################
 ##### downloading installations needed...              #####
 ############################################################
-FROM alpine:latest as downloading_phase
+FROM alpine:3.7 as downloading_phase
 
 ARG JAVA_VERSION=10.0.2-open
 ENV HOME=/home/predictx
 ENV LANG=C.UTF-8
 
 RUN set -ex && \
-    apk add --no-cache bash curl tar zip && \
+    apk add --no-cache bash curl tar unzip zip && \
     adduser -D -s /bin/bash predictx && \
     mkdir -p ${HOME}/bin
 
 
-RUN  curl -sk "https://get.sdkman.io" | bash
+RUN  curl -s "https://get.sdkman.io" | bash
 
 COPY --chown=predictx:predictx autoconfig ${HOME}/.sdkman/etc/config
 COPY --chown=predictx:predictx bin/* ${HOME}/bin/
@@ -39,7 +39,7 @@ RUN  rm -rf ${HOME}/.sdkman/var \
             rm -fr /var/cache/apk/* /tmp/*.apk 2> /dev/null
 
 
-FROM alpine:latest
+FROM alpine:3.7
 
 ARG JAVA_VERSION=10.0.2-zulu
 ENV HOME=/home/predictx \
@@ -47,10 +47,11 @@ ENV HOME=/home/predictx \
     JAVA_HOME=/home/predictx/.sdkman/candidates/java/current \
     PATH=${PATH}:/home/predictx/.sdkman/candidates/java/current/bin
 
-
+COPY bin/*.apk /tmp/
 
 RUN set -ex && \
     apk add --no-cache bash curl gcc musl-dev && \
+    apk add --no-cache --allow-untrusted /tmp/*.apk && \
     adduser -D -s /bin/bash predictx
 
 COPY --from=downloading_phase --chown=predictx:predictx /home/predictx/ /home/predictx/
@@ -58,7 +59,7 @@ COPY --from=downloading_phase --chown=predictx:predictx /home/predictx/ /home/pr
 
 USER predictx
 
-
+CMD "/bin/sh"
 
 #HEALTHCHECK
 ENTRYPOINT /home/predictx/primeNumbersApplication-boot-4.10/bin/primeNumbersApplication
