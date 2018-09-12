@@ -1,23 +1,23 @@
 ############################################################
 ##### downloading installations needed...              #####
 ############################################################
-FROM bitnami/minideb:stretch as downloading_phase
+FROM alpine:3.7 as downloading_phase
 
 ARG JAVA_VERSION=10.0.2-open
 ENV HOME=/home/predictx
 ENV LANG=C.UTF-8
 
 RUN set -ex && \
-    apt update -y && \
-    apt install bash curl tar unzip zip  -y && \
-    mkdir -p ${HOME}/bin && \
-    useradd -d /home/predictx -s /bin/bash predictx
+    apk add --no-cache bash curl tar unzip zip && \
+    adduser -D -s /bin/bash predictx && \
+    mkdir -p ${HOME}/bin
 
 
 RUN  curl -s "https://get.sdkman.io" | bash
 
 COPY --chown=predictx:predictx autoconfig ${HOME}/.sdkman/etc/config
 COPY --chown=predictx:predictx bin/* ${HOME}/bin/
+ADD  --chown=predictx:predictx build/distributions/primeNumbersApplication-boot-4.10.tar ${HOME}
 
 
 RUN  chmod +x ${HOME}/.sdkman/bin/sdkman-init.sh && \
@@ -39,27 +39,28 @@ RUN  rm -rf ${HOME}/.sdkman/var \
             rm -fr /var/cache/apk/* /tmp/*.apk 2> /dev/null
 
 
-FROM bitnami/minideb:stretch
+FROM alpine:edge
 
-ARG JAVA_VERSION=10.0.2-open
+ARG JAVA_VERSION=9.0.4-open
 ENV HOME=/home/predictx \
     LANG=C.UTF-8 \
-    JAVA_HOME=/opt/jdk/${JAVA_VERSION} \
+    JAVA_HOME=/home/predictx/.sdkman/candidates/java/current \
     PATH=${PATH}:/opt/jdk/${JAVA_VERSION}/bin
 
 COPY bin/*.apk /tmp/
 
 RUN set -ex && \
-    mkdir -p ${HOME}/bin && \
-    useradd -d /home/predictx -s /bin/bash predictx
+    apk add --no-cache bash curl && \
+    apk add --no-cache --allow-untrusted /tmp/*.apk && \
+    adduser -D -s /bin/bash predictx
 
 COPY --from=downloading_phase --chown=predictx:predictx /home/predictx/.sdkman/candidates/java/ /opt/jdk/
-ADD  --chown=predictx:predictx build/distributions/primeNumbersApplication-boot-4.10.tar ${HOME}
 
 
-USER predictx
 
-ENTRYPOINT /home/predictx/primeNumbersApplication-boot-4.10/bin/primeNumbersApplication
+
+#HEALTHCHECK
+#CMD /home/predictx/primeNumbersApplication-boot-4.10/bin/primeNumbersApplication
 
 
 
