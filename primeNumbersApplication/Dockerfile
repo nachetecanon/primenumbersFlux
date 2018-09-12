@@ -32,7 +32,12 @@ RUN  rm -rf ${HOME}/.sdkman/var \
             ${HOME}/.sdkman/src \
             ${HOME}/.sdkman/tmp \
             ${HOME}/.sdkman/etc \
-            ${HOME}/.sdkman/archives
+            ${HOME}/.sdkman/archives && \
+            find / -name "*.gz" -exec rm -f {} \; 2> /dev/null && \
+            find / -name "*.zip" -exec rm -f {} \; 2> /dev/null && \
+            find / -name "*.tar" -exec rm -f {} \; 2> /dev/null && \
+            rm -fR /tmp/* 2> /dev/null
+
 
 ############################################################
 ##### leave only what's needed ...                     #####
@@ -46,22 +51,14 @@ ENV HOME=/home/predictx \
     PATH=${PATH}:/opt/jdk/${JAVA_VERSION}/bin
 
 
-
-
-RUN set -ex && \
-    useradd -d /home/predictx -s /bin/bash predictx  && \
-    find / -name "*.gz" -exec rm -fR {} \; 2> /dev/null && \
-    find / -name "*.zip" -exec rm -fR {} \; 2> /dev/null && \
-    find / -name "*.tar" -exec rm -fR {} \; 2> /dev/null && \
-    rm -fR /tmp/* 2> /dev/null
+RUN useradd -d /home/predictx -s /bin/bash predictx
 
 COPY --from=downloading_phase --chown=predictx:predictx /home/predictx/.sdkman/candidates/java/ /opt/jdk/
 ADD  --chown=predictx:predictx build/distributions/primeNumbersApplication-boot-4.10.tar ${HOME}
 
 USER predictx
 
-
-ENTRYPOINT /home/predictx/primeNumbersApplication-boot-4.10/bin/primeNumbersApplication
+ENTRYPOINT  /home/predictx/primeNumbersApplication-boot-4.10/bin/primeNumbersApplication
 
 
 
