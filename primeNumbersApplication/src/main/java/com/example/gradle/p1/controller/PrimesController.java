@@ -3,6 +3,7 @@ package com.example.gradle.p1.controller;
 import com.example.gradle.p1.exceptions.PrimeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,7 +44,7 @@ public class PrimesController {
     }
 
     @Validated
-    @GetMapping(path = "/firstnprimes/{number}")
+    @GetMapping(path = "/firstnprimes/{number}", produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
     public Flux<Integer> getPrimesUnderValue(@PathVariable Integer number) {
         return primesFluxHandler.getPrimeNumbersUntil(number);
     }
