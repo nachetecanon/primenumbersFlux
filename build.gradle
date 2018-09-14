@@ -45,12 +45,12 @@ subprojects {
     version = '1.0'
 
     checkstyleMain {
-        version = "8.11"
+        this.version = "8.11"
         ignoreFailures = false
         configFile = rootProject.file("config/java/checkstyle/checkstyle.xml")
     }
     checkstyleTest {
-        version = "8.11"
+        this.version = "8.11"
         ignoreFailures = false
         configFile = rootProject.file("config/java/checkstyle/checkstyle.xml")
     }
@@ -87,8 +87,9 @@ subprojects {
             html.enabled = true
         }
     }
+
     pmdMain {
-        version = '4.10'
+        this.version = '4.10'
         ignoreFailures = false
         ruleSetConfig = rootProject.resources.text.fromFile("config/java/pmd/ruleset.xml")
         reports {

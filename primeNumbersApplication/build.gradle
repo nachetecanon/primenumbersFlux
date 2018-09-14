@@ -1,23 +1,24 @@
+
 plugins {
     id "org.springframework.boot" version "2.0.4.RELEASE"
     id "org.asciidoctor.convert" version "1.5.3"
-    id "com.palantir.docker-compose" version "0.20.1"
+    id 'com.avast.gradle.docker-compose' version '0.8.7'
 }
 
 apply plugin: 'java'
 apply plugin: 'application'
-apply plugin: 'com.palantir.docker-compose'
+apply plugin: 'docker-compose'
 
 ext {
     snippetsDir = file('build/generated-snippets')
-
 }
 ext['spring-restdocs.version'] = '2.0.2.RELEASE'
 
 project.description = 'P1 project - Application'
-
 mainClassName = 'com.example.gradle.p1.DemoApplication'
 applicationName = "primeNumbersApplication"
+version = "$project.version"
+
 
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
@@ -49,7 +50,19 @@ jar {
     }
 }
 
-dockerComposeUp.dependsOn(build)
+bootDistTar {
+    version "${version}"
+}
+
+dockerCompose {
+    environment.put 'DIST_FILE', "${project.name}-boot-${version}.tar"
+    environment.put 'DIST_FILE2', "${project.name}"
+    environment.put 'DIST_VERSION', "${version}"
+}
+
+composeBuild {
+    dependsOn bootDistTar
+}
 
 bootStartScripts {
     doLast {

@@ -3,6 +3,10 @@ services:
   primenumbers:
     build:
       context: .
+      args:
+        - DIST_FILE=$DIST_FILE
+        - DIST_FILE2=$DIST_FILE2
+        - DIST_VERSION=$DIST_VERSION
     container_name: primeNumbersApp
     ports:
     - "3333:3333"

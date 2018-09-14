@@ -3,6 +3,7 @@
 ############################################################
 FROM bitnami/minideb:stretch as downloading_phase
 
+ARG DIST_FILE
 ARG JAVA_VERSION=10.0.2-open
 ENV HOME=/home/predictx
 ENV LANG=C.UTF-8
@@ -18,7 +19,7 @@ RUN  curl -s "https://get.sdkman.io" | bash
 
 COPY --chown=predictx:predictx autoconfig ${HOME}/.sdkman/etc/config
 COPY --chown=predictx:predictx bin/* ${HOME}/bin/
-
+ADD --chown=predictx:predictx build/distributions/${DIST_FILE} ${HOME}/
 
 RUN  chmod +x ${HOME}/.sdkman/bin/sdkman-init.sh && \
      chmod +x ${HOME}/bin/sdkman-wrapper.sh && \
@@ -75,21 +76,27 @@ RUN  rm -rf ${HOME}/.sdkman/var \
 ############################################################
 FROM bitnami/minideb:stretch
 
+ARG DIST_FILE2
+ARG DIST_VERSION
 ARG JAVA_VERSION=10.0.2-open
+
+ENV DIST_FILE2=$DIST_FILE2
+ENV DIST_VERSION=$DIST_VERSION
+
 ENV HOME=/home/predictx \
     LANG=C.UTF-8 \
     JAVA_HOME=/opt/jdk/${JAVA_VERSION} \
     PATH=${PATH}:/opt/jdk/${JAVA_VERSION}/bin
 
-
 RUN useradd -d /home/predictx -s /bin/bash predictx
 
 COPY --from=downloading_phase --chown=predictx:predictx /home/predictx/.sdkman/candidates/java/ /opt/jdk/
-ADD  --chown=predictx:predictx build/distributions/primeNumbersApplication-boot-4.10.tar ${HOME}
+COPY --from=downloading_phase --chown=predictx:predictx /home/predictx/${DIST_FILE2}-boot-${DIST_VERSION} /home/predictx/
 
 USER predictx
 
-ENTRYPOINT  /home/predictx/primeNumbersApplication-boot-4.10/bin/primeNumbersApplication
+
+ENTRYPOINT  /home/predictx/bin/${DIST_FILE2}
 
 
 
