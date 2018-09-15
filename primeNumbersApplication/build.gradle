@@ -17,7 +17,6 @@ ext['spring-restdocs.version'] = '2.0.2.RELEASE'
 project.description = 'P1 project - Application'
 mainClassName = 'com.example.gradle.p1.DemoApplication'
 applicationName = "primeNumbersApplication"
-version = "$project.version"
 
 
 dependencies {
@@ -61,9 +60,9 @@ bootDistTar {
 
 
 dockerCompose {
-    environment.put 'DIST_FILE', "${project.name}-boot-${version}.tar"
+    environment.put 'DIST_FILE', "${project.name}-boot-${projectVersion}.tar"
     environment.put 'DIST_FILE2', "${project.name}"
-    environment.put 'DIST_VERSION', "${version}"
+    environment.put 'DIST_VERSION', "${projectVersion}"
     projectName "server"
 }
 
