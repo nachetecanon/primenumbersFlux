@@ -47,7 +47,10 @@ jar {
     dependsOn asciidoctor
 }
 
-
+distTar {
+    version "${version}"
+    from asciidoctor
+}
 
 bootDistTar {
     version "${version}"
