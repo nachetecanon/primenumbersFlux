@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: primenumbers
+  mvc:
+    favicon:
+      enabled: false
+
+api:
+  version: v1.0
+
+server:
+  port: 3333
