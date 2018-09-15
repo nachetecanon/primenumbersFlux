@@ -40,20 +40,21 @@ test {
 asciidoctor {
     dependsOn test
     backends 'html5'
-    inputs.dir snippetsDir
 }
 
 
 jar {
     dependsOn asciidoctor
-    from("${asciidoctor.outputDir}/html5") {
-        println(it)
-        into 'static/docs'
-    }
+}
+
+distTar {
+    version "${version}"
+    from asciidoctor
 }
 
 bootDistTar {
     version "${version}"
+    from asciidoctor
 }
 
 
