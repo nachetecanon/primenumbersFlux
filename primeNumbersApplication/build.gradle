@@ -49,11 +49,13 @@ jar {
 
 distTar {
     version "${version}"
+    setExcludes (["html5"])
     from asciidoctor
 }
 
 bootDistTar {
     version "${version}"
+    setExcludes (["html5"])
     from asciidoctor
 }
 
@@ -69,9 +71,6 @@ composeBuild {
     dependsOn bootDistTar
 }
 
-bootDistTar {
-    snippetsDir
-}
 
 bootStartScripts {
     doLast {
