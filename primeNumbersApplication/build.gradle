@@ -1,13 +1,13 @@
-
 plugins {
     id "org.springframework.boot" version "2.0.4.RELEASE"
-    id "org.asciidoctor.convert" version "1.5.3"
+    id "org.asciidoctor.convert" version "1.5.8"
     id 'com.avast.gradle.docker-compose' version '0.8.7'
 }
 
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'docker-compose'
+apply plugin: 'org.asciidoctor.convert'
 
 ext {
     snippetsDir = file('build/generated-snippets')
@@ -26,7 +26,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-devtools")
     compile project(':primeNumbersService:')
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    testCompile group: 'org.springframework.cloud', name: 'spring-cloud-client'
     testCompile group: 'io.projectreactor', name: 'reactor-test'
     testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
     testCompile 'org.codehaus.groovy:groovy-all:2.4.15'
@@ -39,13 +38,16 @@ test {
 }
 
 asciidoctor {
-    inputs.dir snippetsDir
     dependsOn test
+    backends 'html5'
+    inputs.dir snippetsDir
 }
+
 
 jar {
     dependsOn asciidoctor
     from("${asciidoctor.outputDir}/html5") {
+        println(it)
         into 'static/docs'
     }
 }
@@ -54,10 +56,12 @@ bootDistTar {
     version "${version}"
 }
 
+
 dockerCompose {
     environment.put 'DIST_FILE', "${project.name}-boot-${version}.tar"
     environment.put 'DIST_FILE2', "${project.name}"
     environment.put 'DIST_VERSION', "${version}"
+    projectName "server"
 }
 
 composeBuild {

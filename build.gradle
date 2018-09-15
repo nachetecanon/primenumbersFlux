@@ -42,7 +42,7 @@ subprojects {
     sourceCompatibility = '1.10'
     targetCompatibility = '1.10'
 
-    version = '1.0'
+    version = '1.0.0-SNAPSHOT'
 
     checkstyleMain {
         this.version = "8.11"
