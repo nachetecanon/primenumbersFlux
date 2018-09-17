@@ -12,13 +12,11 @@ buildscript {
 
 
 subprojects {
-    plugins {
-        apply(plugin = "java")
-        apply(plugin = "pmd")
-        apply(plugin = "checkstyle")
-        apply(plugin = "jacoco")
-        apply(plugin = "io.spring.dependency-management")
-    }
+    apply(plugin = "java")
+    apply(plugin = "pmd")
+    apply(plugin = "checkstyle")
+    apply(plugin = "jacoco")
+    apply(plugin = "io.spring.dependency-management")
 
     repositories {
         mavenCentral()
@@ -42,35 +40,30 @@ subprojects {
     }
     configure<JacocoPluginExtension> {
         toolVersion = "0.8.1"
-        evaluationDependsOn("jacocoTestReport")
-
-    }
-    configure<JacocoReport> {
-        reports {
-            html
-        }
-    }
-    configure<JacocoCoverageVerification> {
-        dependsOn("JacocoReport")
-        violationRules {
-            isFailOnViolation = true
-            rule {
-                enabled = true
-                element = "CLASS"
-                excludes = listOf("*Exception", "*Application")
-                limit {
-                    counter = "LINE"
-                    value = "COVEREDRATIO"
-                    minimum = BigDecimal.valueOf(0.95)
-                }
-                limit {
-                    counter = "BRANCH"
-                    value = "COVEREDRATIO"
-                    minimum = BigDecimal.valueOf(0.70)
+        tasks {
+            "jacocoTestCoverageVerification"(JacocoCoverageVerification::class) {
+                violationRules {
+                    isFailOnViolation = true
+                    rule {
+                        enabled = true
+                        element = "CLASS"
+                        excludes = listOf("*Exception", "*Application")
+                        limit {
+                            counter = "LINE"
+                            value = "COVEREDRATIO"
+                            minimum = BigDecimal.valueOf(0.95)
+                        }
+                        limit {
+                            counter = "BRANCH"
+                            value = "COVEREDRATIO"
+                            minimum = BigDecimal.valueOf(0.70)
+                        }
+                    }
                 }
             }
         }
     }
+    /*https://github.com/gradle/kotlin-dsl/blob/master/samples/code-quality/build.gradle.kts*/
     configure<PmdExtension> {
         toolVersion = "4.10"
         isIgnoreFailures = false

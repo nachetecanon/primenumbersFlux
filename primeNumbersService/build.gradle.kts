@@ -1,6 +1,6 @@
-apply plugin: 'java'
 
-project.description = 'P1 project - Service'
+
+project.description = "P1 project - Service"
 
 dependencies {
     compile 'javax.validation:validation-api:2.0.1.Final'
