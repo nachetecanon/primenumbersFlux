@@ -1,4 +1,6 @@
+import org.asciidoctor.gradle.AsciidoctorTask
 import org.jetbrains.kotlin.js.inline.util.extractImportTag
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     java
@@ -12,20 +14,6 @@ apply(plugin = "application")
 apply(plugin = "docker-compose")
 apply(plugin = "org.asciidoctor.convert")
 
-val snippetsDir = file("build/generated-snippets")
-val springrestdocs = "2.0.2.RELEASE"
-
-project.description = "P1 project - Application"
-
-tasks {
-    "bootJar"(BootJar::class) {
-        archiveName = "app.jar"
-        mainClassName = "com.example.gradle.p1.DemoApplication"
-        applicationName = "primeNumbersApplication"
-    }
-}
-
-
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-webflux")
     compile("org.springframework.boot:spring-boot-actuator")
@@ -38,20 +26,27 @@ dependencies {
     testCompile("org.springframework.restdocs:spring-restdocs-webtestclient:${springrestdocs}")
     asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor:${springrestdocs}")
 }
+val snippetsDir = file("build/generated-snippets")
+val springrestdocs = "2.0.2.RELEASE"
 
-test {
-    outputs.dir snippetsDir
+project.description = "P1 project - Application"
+
+tasks {
+    "asciidoctor"(AsciidoctorTask::class) {
+        dependsOn("test")
+        backends(arrayListOf("html5","pdf","ebook"))
+    }
+
 }
 
-asciidoctor {
-    dependsOn test
-            backends "html5"
+application {
+    applicationName = "app.jar"
+    mainClassName = "com.example.gradle.p1.DemoApplication"
+    distributions {
+
+    }
 }
 
-
-jar {
-    dependsOn asciidoctor
-}
 
 distTar {
     version "${version}"

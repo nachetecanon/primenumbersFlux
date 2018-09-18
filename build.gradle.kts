@@ -1,8 +1,6 @@
 import org.gradle.internal.jacoco.rules.JacocoViolationRuleImpl
-import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 
-group = "com.valverde.nacho"
-version = "1.0.1-SNAPSHOT"
+
 
 buildscript {
     repositories {
@@ -18,6 +16,8 @@ buildscript {
 }
 
 subprojects {
+    group = "com.valverde.nacho"
+    version = "1.0.1-SNAPSHOT"
     apply(plugin = "java")
     apply(plugin = "pmd")
     apply(plugin = "checkstyle")
