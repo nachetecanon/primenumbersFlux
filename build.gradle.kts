@@ -1,4 +1,8 @@
 import org.gradle.internal.jacoco.rules.JacocoViolationRuleImpl
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
+
+group = "com.valverde.nacho"
+version = "1.0.1-SNAPSHOT"
 
 buildscript {
     repositories {
@@ -10,13 +14,13 @@ buildscript {
 
 }
 
-
 subprojects {
     apply(plugin = "java")
     apply(plugin = "pmd")
     apply(plugin = "checkstyle")
     apply(plugin = "jacoco")
     apply(plugin = "io.spring.dependency-management")
+
 
     repositories {
         mavenCentral()
@@ -68,9 +72,6 @@ subprojects {
         toolVersion = "4.10"
         isIgnoreFailures = false
         ruleSetConfig = rootProject.resources.text.fromFile("config/java/pmd/ruleset.xml")
-    }
-    configure<PmdReports> {
-        html
     }
 
 
