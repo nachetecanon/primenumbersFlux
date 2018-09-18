@@ -7,6 +7,9 @@ version = "1.0.1-SNAPSHOT"
 buildscript {
     repositories {
         jcenter()
+        maven {
+            url= uri("https://plugins.gradle.org/m2/")
+        }
     }
     dependencies {
         classpath("io.spring.gradle:dependency-management-plugin:1.0.6.RELEASE")
