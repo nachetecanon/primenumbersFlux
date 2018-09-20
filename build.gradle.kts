@@ -42,9 +42,10 @@ subprojects {
 
 
     configure<CheckstyleExtension> {
-        toolVersion = "8.11"
+        toolVersion = "8.12"
         maxErrors = 0
         configFile = rootProject.file("config/java/checkstyle/checkstyle.xml")
+        isShowViolations = true
     }
     configure<JacocoPluginExtension> {
         toolVersion = "0.8.1"
