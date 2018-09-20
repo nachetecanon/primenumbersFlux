@@ -1,4 +1,3 @@
 rootProject.name = "primeNumbers"
-include("primeNumbersApplication")
-include("primeNumbersService")
+include("primeNumbersService","primeNumbersApplication")
 

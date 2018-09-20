@@ -1,3 +1,4 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.gradle.internal.jacoco.rules.JacocoViolationRuleImpl
 
 
@@ -77,6 +78,11 @@ subprojects {
         ruleSetConfig = rootProject.resources.text.fromFile("config/java/pmd/ruleset.xml")
     }
 
+    configure<DependencyManagementExtension> {
+        imports {
+            mavenBom("io.spring.platform:platform-bom:Cairo-SR3")
+        }
+    }
 
 }
 

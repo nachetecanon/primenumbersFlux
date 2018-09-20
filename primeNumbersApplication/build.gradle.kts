@@ -1,10 +1,10 @@
 import org.asciidoctor.gradle.AsciidoctorTask
-import org.jetbrains.kotlin.js.inline.util.extractImportTag
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     java
     application
+    distribution
     id("org.springframework.boot") version "2.0.4.RELEASE"
     id("org.asciidoctor.convert") version "1.5.3"
     id("com.avast.gradle.docker-compose") version "0.8.7"
@@ -18,7 +18,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-webflux")
     compile("org.springframework.boot:spring-boot-actuator")
     compile("org.springframework.boot:spring-boot-devtools")
-    compile(":primeNumbersService:")
+    compile(project(":primeNumbersService"))
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("io.projectreactor:reactor-test")
     testCompile("org.spockframework:spock-core:1.0-groovy-2.4")
@@ -42,12 +42,11 @@ tasks {
 application {
     applicationName = "app.jar"
     mainClassName = "com.example.gradle.p1.DemoApplication"
-    distributions {
-
-    }
 }
 
 
+
+/*
 distTar {
     version "${version}"
     setExcludes(["html5"])
@@ -80,3 +79,4 @@ bootStartScripts {
 }
 
 
+*/
