@@ -2,7 +2,6 @@ package com.example.gradle.p1.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
@@ -20,8 +19,7 @@ public class PrimesService {
     private static final Logger LOGGER = LoggerFactory.getLogger(PrimesService.class);
 
     /**
-     * searches for the highest prime number below the one passed by param
-     *
+     * searches for the highest prime number below the one passed by param.
      * @param param number to search the just previous prime number
      * @return optional of Integer with the number or empty
      */
@@ -36,6 +34,7 @@ public class PrimesService {
     }
 
     /**
+     * check if a number is or not prime
      * @param param number to check
      * @return true/false
      *
@@ -60,6 +59,9 @@ public class PrimesService {
 
 
     /**
+     *
+     * method to extract the list of prime numbers under a limit.
+     *
      * @param end final number to generate the list
      * @return ordered set of prime integers found
      *

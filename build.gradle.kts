@@ -74,7 +74,7 @@ subprojects {
     }
     /*https://github.com/gradle/kotlin-dsl/blob/master/samples/code-quality/build.gradle.kts*/
     configure<PmdExtension> {
-        toolVersion = "4.10"
+        toolVersion = "4.10.2"
         isIgnoreFailures = false
         ruleSetConfig = rootProject.resources.text.fromFile("config/java/pmd/ruleset.xml")
     }

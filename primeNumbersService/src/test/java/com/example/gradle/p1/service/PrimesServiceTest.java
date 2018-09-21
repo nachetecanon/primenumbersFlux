@@ -1,12 +1,13 @@
 package com.example.gradle.p1.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.example.gradle.p1.Base;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
-
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +15,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class PrimesServiceTest extends Base {
 

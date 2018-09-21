@@ -1,5 +1,8 @@
 package com.example.gradle.p1.controller;
 
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.BDDMockito.when;
+
 import com.example.gradle.p1.Base;
 import com.example.gradle.p1.exceptions.PrimeNotFoundException;
 import org.junit.Before;
@@ -16,12 +19,10 @@ import org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
+import java.util.Objects;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
 
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.BDDMockito.when;
 
 @RunWith(SpringRunner.class)
 @WebFluxTest
@@ -41,7 +42,6 @@ public class PrimesControllerTest extends Base {
     @Value("${api.version:v0}")
     private String version;
     private String apiBaseUri;
-
 
     @Before
     public void setup() {

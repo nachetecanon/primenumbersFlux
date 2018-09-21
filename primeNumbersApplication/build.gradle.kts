@@ -14,6 +14,9 @@ apply(plugin = "application")
 apply(plugin = "docker-compose")
 apply(plugin = "org.asciidoctor.convert")
 
+val springrestdocs = "2.0.2.RELEASE"
+
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-webflux")
     compile("org.springframework.boot:spring-boot-actuator")
@@ -23,11 +26,10 @@ dependencies {
     testCompile("io.projectreactor:reactor-test")
     testCompile("org.spockframework:spock-core:1.0-groovy-2.4")
     testCompile("org.codehaus.groovy:groovy-all:2.4.15")
-    testCompile("org.springframework.restdocs:spring-restdocs-webtestclient:${springrestdocs}")
-    asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor:${springrestdocs}")
+    testCompile("org.springframework.restdocs:spring-restdocs-webtestclient:$springrestdocs")
+    asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor:$springrestdocs")
 }
 val snippetsDir = file("build/generated-snippets")
-val springrestdocs = "2.0.2.RELEASE"
 
 project.description = "P1 project - Application"
 

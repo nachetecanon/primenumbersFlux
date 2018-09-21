@@ -1,5 +1,8 @@
 package com.example.gradle.p1.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.BDDMockito.when;
 
 import com.example.gradle.p1.Base;
 import com.example.gradle.p1.exceptions.PrimeNotFoundException;
@@ -11,13 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
+import java.util.Optional;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.BDDMockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
